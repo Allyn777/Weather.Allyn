@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Weather Update - Iligan City</title>
+   <link rel="stylesheet" href="style.css">
+
+
+ 
+</head>
+<body>
+   <div class="call"><h1>WEATHER UPDATE</h1>
+      <div class="searchWrapper">
+         <input type="text" id="cityInput" placeholder="Search City Name">  
+         <button id="searchButton"><i class='bx bx-search-alt-2'></i></button>
+     </div>
+</div>
+   
+   <div id="weather">
+
+   </div>
+  
+   <script>
+      document.addEventListener('DOMContentLoaded', async function() {
+          const apiKey = '294c8528852742dcb9100829242208';
+      
+
+          fetchWeatherData('Iligan City');
+      
+    
+          async function fetchWeatherData(cityName) {
+              const apiEndpoint = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=3`;
+      
+              try {
+                  const response = await fetch(apiEndpoint);
+                  const weatherData = await response.json();
+                  
+                  const weatherContainer = document.getElementById('weather');
+                  weatherContainer.innerHTML = ''; 
+                 
+
+                  weatherData.forecast.forecastday.forEach(element => {
+                      weatherContainer.innerHTML += `
+                      <div>
+                          <div class="weatherdata">
+                              <h1>${cityName}</h1>
+                              <p><strong>Date:</strong> ${element.date}</p>
+                              <p><strong>Temperature:</strong> ${element.day.avgtemp_c}</p>
+                              <p><strong>Weather:</strong> ${element.day.condition.text}</p>
+                              <p><strong>Humidity:</strong> ${element.day.avghumidity}%</p>
+                              <p><img src="https:${element.day.condition.icon}" /></p>
+                          </div>
+                      </div>
+                      `;
+                  });
+              } catch (error) {
+                  const weatherContainer = document.getElementById('weather');
+                  weatherContainer.innerHTML = `<p>Unable to retrieve weather data: ${error.message}</p>`;
+              }
+          }
+      
+          document.getElementById('searchButton').addEventListener('click', () => {
+              const cityInput = document.getElementById('cityInput').value;
+              if (cityInput) {
+                  fetchWeatherData(cityInput);
+              } else {
+                  alert('Please enter a city name');
+              }
+          });
+      });
+      </script>
+      
+
+<div class="footer">
+   <footer> Copy Rights Reserved @ 8/23/2024 
+      Allyn Marc C. Dumapias
+      
+   </footer>
+</div>
+
+</body>
+</html>
+
+
+
+    
